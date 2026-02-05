@@ -6,8 +6,21 @@
   <link href="/src/style.css" rel="stylesheet">
 </head>
 <body>
-  <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+  <div class="overflow-auto relative min-h-screen">
+    <img src="src/background.jpg" class="object-cover w-full h-full absolute -z-10" alt="Background Image">
+  <div class="bg-white/70 p-4">
+    <p class="text-white p-4">This is a blue header with white text.</p>
+  </div>
+  <div class="h-screen flex">
+
+    <div class="bg-white/30">
+      <p class="text-black p-4">This is a semi-transparent white box.</p>
+    </div>
+    <div class="bg-white/60 w-screen">
+      <p class="text-black p-4">This is a more opaque white box.</p>
+    </div>
+  </div>
+</div>
+  
 </body>
 </html>
