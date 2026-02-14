@@ -1,7 +1,7 @@
 # TSA-Webmaster-2026
 Project for the TSA Webmaster competition.
 
-Our project follows the theme 
+Our project follows the theme by making a community website for a fictional city taking place in the future. (heavily inspired by star wars)
 
 ## TODO:
 - [ ] Rename the planet, and get rid of other copyrighted things
