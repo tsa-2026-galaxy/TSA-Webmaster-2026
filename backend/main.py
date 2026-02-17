@@ -8,6 +8,7 @@ import bcrypt
 '''
 TODO: integrate bcrypt or some other password thingamajig
 '''
+
 # Create a resource
 async def createResource(data, ws):
     con = sqlite3.connect("tsa2026.db")
@@ -17,7 +18,7 @@ async def createResource(data, ws):
     if id == None:
         id = (-1,)
 
-    inputData = (int(id[0])+1, data["title"], data["password"], data["summary"], data["color"], data["location"], data["type"])
+    inputData = (int(id[0])+1, data["title"], bcrypt.hashpw(bytes(data["password"], encoding='utf8'), bcrypt.gensalt(14)), data["summary"], data["color"], data["location"], data["type"])
 
     cur.execute("INSERT INTO resources VALUES(?, ?, ?, ?, ?, ?, ?)", inputData)
     con.commit()
@@ -33,7 +34,7 @@ async def createEvent(data, ws):
     if id == None:
         id = (-1,)
 
-    inputData = (int(id[0])+1, data["title"], data["password"], data["color"], data["location"], data["startTime"])
+    inputData = (int(id[0])+1, data["title"], bcrypt.hashpw(bytes(data["password"], encoding='utf8'), bcrypt.gensalt(14)), data["color"], data["location"], data["startTime"])
 
     cur.execute("INSERT INTO events VALUES(?, ?, ?, ?, ?, ?)", inputData)
     con.commit()
@@ -43,7 +44,7 @@ async def createEvent(data, ws):
 async def getEvents(ws):
     con = sqlite3.connect("tsa2026.db")
     cur = con.cursor()
-    data = cur.execute("SELECT id, title, description, color, location, start FROM resources").fetchall() 
+    data = cur.execute("SELECT id, title, description, color, location, start FROM events").fetchall() 
     # now thinking about it maybe passwords shouldnt be there mayhaps?
     await ws.send(json.dumps(data))
 
@@ -52,6 +53,12 @@ async def getResources(ws):
     cur = con.cursor()
     data = cur.execute("SELECT id, title, description, color, location, type FROM resources").fetchall()
     await ws.send(json.dumps(data))
+
+async def editItem(data, ws):
+    if data["type"]
+    con = sqlite3.connect("tsa2026.db")
+    cur = con.cursor()
+    hashPass = cur.execute("SELECT password FROM ")
 
 async def serveResponse(websocket):
     async for message in websocket:
