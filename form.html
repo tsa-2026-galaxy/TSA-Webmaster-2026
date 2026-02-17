@@ -5,84 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration - Waterview</title>
     <link href="/src/style.css" rel="stylesheet">
+    <script src="src/head.js"></script>
 </head>
 <body class="bg-white/30 mask-cover">
-  <nav class="sticky top-0 bg-white/70 p-4 flex justify-between items-center">
-    <a>Logo</a>
-    <div class="hologram flex justify-between items-center gap-15 p-1 pl-20 pr-20 text-white rounded-2xl backdrop-blur-2xl">
-      <!--still feeling slightly iffy about the hologram background, not sure how I would improve it though...-->
-      <a href="#">Home</a>
-      <a href="resources.html">Resources</a>
-      <a href="timeline.html">Timeline</a>
-      <a href="events.html">Events</a>
-      <a href="reference.html">Reference</a>
-      <a title="Light/Dark Mode switcher">O</a>
-    </div>
-  </nav>
-    <!-- Registration Form -->
-     <!-- Make space themed -->
+  <script>createNavBar()</script>
     <div class="h-screen w-full relative flex items-center justify-center">
         <div class="bg-red-600/40 backdrop-blur-sm rounded-xl shadow-2xl p-8 max-w-lg w-full mx-4">
-            <h1 class="text-3xl font-bold text-[#000000] mb-4 text-center">Welcome To Planet</h1>
-            <p class="text-[#000000] mb-6 text-center">Sign up to create an account</p>
+            <h1 class="text-3xl font-bold text-[#000000] mb-4 text-center">Welcome To Boruscant</h1>
+            <p class="text-[#000000] mb-6 text-center">Fill out this form to enter your event or resource</p>
             
             <form class="space-y-4 flex flex-col items-center justify-center" action="#" method="POST">
-                <div class="flex gap-2 w-full">
-                    <input 
-                        type="text" 
-                        name="firstName"
-                        placeholder="First Name" 
-                        class="flex-1 bg-white px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6798B5] focus:border-transparent"
-                        required
-                    />
-                    <input 
-                        type="text" 
-                        name="lastName"
-                        placeholder="Last Name" 
-                        class="flex-1 bg-white px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6798B5] focus:border-transparent"
-                        required
-                    />
-                </div>
                 <input 
                     type="text" 
-                    name="username"
-                    placeholder="Username" 
+                    name="eventname"
+                    placeholder="Name of Event / Resource" 
+                    class="w-full bg-white px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6798B5] focus:border-transparent"
+                    required
+                />
+                <select 
+                    name="type" 
+                    class="w-full bg-white px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6798B5] focus:border-transparent"
+                    required
+                >
+                    <option value="" disabled selected>Select Type</option>
+                    <option value="event">Event</option>
+                    <option value="resource">Resource</option>
+                </select>
+                <input 
+                    type="text" 
+                    name="location"
+                    placeholder="Location (If applicable)" 
+                    class="w-full bg-white px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6798B5] focus:border-transparent"
+                    optional
+                />
+                <input 
+                    type="text" 
+                    name="description"
+                    placeholder="Short description of Event / resource" 
                     class="w-full bg-white px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6798B5] focus:border-transparent"
                     required
                 />
                 <input 
                     type="password" 
                     name="password"
-                    placeholder="Password" 
+                    placeholder="Password to access / edit details" 
                     class="w-full bg-white px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6798B5] focus:border-transparent"
                     required
                 />
-                <input 
-                    type="email" 
-                    name="email"
-                    placeholder="Email address" 
+                <select 
+                    name="color" 
                     class="w-full bg-white px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6798B5] focus:border-transparent"
                     required
-                />
-                <input 
-                    type="text" 
-                    name="address"
-                    placeholder="Home Address" 
-                    class="w-full bg-white px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6798B5] focus:border-transparent"
-                    required
-                />
-                <input 
-                    type="tel" 
-                    name="phone"
-                    placeholder="Phone Number" 
-                    class="w-full bg-white px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6798B5] focus:border-transparent"
-                    required
-                />
+                >
+                    <option value="" disabled selected>Select Color</option>
+                    <option value="red">Red</option>
+                    <option value="blue">Blue</option>
+                    <option value="green">Green</option>
+                    <option value="yellow">Yellow</option>
+                    <option value="purple">Purple</option>
+                    <option value="orange">Orange</option>
+                </select>
                 <button 
                     type="submit" 
-                    class="w-full bg-[#6798B5] hologram hover:bg-[#5086A5] text-white font-semibold py-3 px-4 rounded-lg transition-colors shadow-sm"
+                    class="w-full bg-[#6798B5] hologram hover:bg-[#5086A5] text-white font-semibold py-3 px-4 rounded-lg transition-colors shadow-sm hover:cursor-pointer"
                 >
-                    Register
+                    Submit
                 </button>
             </form>
         </div>
