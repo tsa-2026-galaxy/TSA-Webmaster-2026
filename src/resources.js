@@ -1,28 +1,12 @@
 function createArticles(data) {
-    /*                    <option value="red">Red</option>
-                    <option value="blue">Blue</option>
-                    <option value="green">Green</option>
-                    <option value="yellow">Yellow</option>
-                    <option value="purple">Purple</option>
-                    <option value="orange">Orange</option> */
-    const colors = {
-        "red" : "#fca5a5",
-        "orange" : "#fdba74",
-        "yellow" : "#fde047",
-        "green" : "#86efac",
-        "blue" : "#93c5fd",
-        "purple" : "#d8b4fe",
-    } 
-
     const newArticle = document.createElement("article");
     newArticle.classList.add("p-4", "rounded-lg", "w-full", `bg_${data[3]}`);
-    // newArticle.style.backgroundColor = colors[data[3]];
     // I probably just dont know how to use sql, but sql is evil and gave the data in arrays without keys, so sorry if the indexing looks a bit unreedable
     // 0: id, 1: title, 2: description 3: color 4: location 5: type
     newArticle.dataset.rId = parseInt(data[0]);
     newArticle.innerHTML = `<h3 class="text-2xl font-bold">${data[1]}</h3>
 <p class="mt-2 line-clamp-4">${data[2]}</p>
-<a href="javascript:void(0)" onclick="viewDetails(this)" class="flex items-center justify-center bg-blue-300 rounded-md w-full text-gray-900 py-1">View Details</a>`;
+<a href="javascript:void(0)" onclick="viewDetails(this)" class="flex items-center justify-center bg-blue-200 rounded-md w-full text-gray-900 py-1">View Details</a>`;
     document.getElementById(data[5]).append(newArticle);
 }
 
