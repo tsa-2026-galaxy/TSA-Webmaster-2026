@@ -19,7 +19,7 @@ def createSampleData():
         (2, "Gnosh's pizza opening", bcrypt.hashpw(bytes("pizzatastic", encoding='utf8'), bcrypt.gensalt(14)), "awesome evil pizza place is opening", "yellow", "level 4", "August 7th")
     )
     resources = [
-        (0, "Universal Library", bcrypt.hashpw(bytes("rat", encoding='utf8'), bcrypt.gensalt(14)), "holy moly theres alot of history here", "green", "level 7", "library"),
+        (0, "Universal Library", bcrypt.hashpw(bytes("rat", encoding='utf8'), bcrypt.gensalt(14)), "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur mauris nunc, mollis in risus vitae, vestibulum pulvinar libero. Quisque id metus varius, rhoncus ligula vel, aliquet dolor. Ut convallis vel ipsum at ornare. Nam tristique eleifend neque eu suscipit. Proin tincidunt purus sit amet massa faucibus facilisis. Quisque sit amet sem velit. Aliquam facilisis quam felis, sit amet porta lacus placerat id. Suspendisse blandit, massa id bibendum fringilla, diam leo aliquet enim, id sodales enim nulla id eros. Suspendisse tempor feugiat mi sed hendrerit. Nunc vehicula ex sit amet felis blandit vulputate. ", "green", "level 7", "library"),
         (1, "Universal Library 2", bcrypt.hashpw(bytes("egg", encoding='utf8'), bcrypt.gensalt(14)), "not enough history though, this has more", "green", "level 23", "library"),
         (2, "Gnosh's pizza", bcrypt.hashpw(bytes("pizzatastic", encoding='utf8'), bcrypt.gensalt(14)), "awesome evil pizza place that is opened probably", "yellow", "level 4", "food"),
         (3, "Sample 2", bcrypt.hashpw(bytes("pizzatastic", encoding='utf8'), bcrypt.gensalt(14)), "awesome evil pizza place that is opened probably", "red", "level 4", "food"),

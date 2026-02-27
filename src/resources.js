@@ -1,70 +1,93 @@
 function createArticles(data) {
     const newArticle = document.createElement("article");
-    newArticle.classList.add("p-4", "rounded-lg", "w-full", `bg_${data[3]}`);
+    newArticle.classList.add("p-4", "rounded-lg", "w-full", `bg_${data[3]}`, "flex", "flex-col", "list-none");
     // I probably just dont know how to use sql, but sql is evil and gave the data in arrays without keys, so sorry if the indexing looks a bit unreedable
     // 0: id, 1: title, 2: description 3: color 4: location 5: type
     newArticle.dataset.rId = parseInt(data[0]);
     newArticle.innerHTML = `<h3 class="text-2xl font-bold">${data[1]}</h3>
-<p class="mt-2 line-clamp-4">${data[2]}</p>
-<a href="javascript:void(0)" onclick="viewDetails(this)" class="flex items-center justify-center bg-blue-200 rounded-md w-full text-gray-900 py-1">View Details</a>`;
+<p><span class="text-bold">Location:</span> ${data[4]}</p>
+<p class="mt-2 line-clamp-4 grow">${data[2]}</p>
+<div class="flex"><a href="javascript:void(0)" onclick="viewDetails(this)" class="flex items-center justify-center bg-blue-200 rounded-md w-full text-gray-900 py-1">View Details</a></div>`;
     document.getElementById(data[5]).append(newArticle);
 }
 
 function viewDetails(anchor) {
-    // Move items to a new section beneathe it, and hide the current items
-    let curChildren = Array.from(anchor.parentElement.parentElement.children);
-    const newSection = document.createElement("section");
-    newSection.classList.add("grid", "sm:grid-cols-1", "md:grid-cols-2", "lg:grid-cols-3", "2xl:grid-cols-4", "justify-center", "gap-4");
-    for (item of curChildren.slice(curChildren.indexOf(anchor.parentElement)+1)) {
-        newSection.appendChild(item);
+    const articleElem = anchor.parentElement.parentElement;
+    const curSection = articleElem.parentElement;
+    // Edit article
+    articleElem.dataset.opened = true;
+    articleElem.style.minHeight = "25vh";
+    // Edit button
+    anchor.classList.remove("bg-blue-200", "w-full");
+    anchor.classList.add("bg-red-200", "w-1/2");
+    anchor.innerHTML = "Close Details";
+    anchor.setAttribute("onclick", "closeDetails(this)");
+    // Add edit button
+    const editButton = document.createElement("a")
+    editButton.href = `form.html?type=resource&id=${articleElem.dataset.rId}`;
+    editButton.classList.add("flex", "items-center", "justify-center", "bg-yellow-200", "rounded-md", "ml-auto", "w-1/2", "text-gray-900", "py-1");
+    editButton.innerHTML = "Edit";
+    editButton.title = "Requires password!!";
+    anchor.parentElement.append(editButton);
+    articleElem.children[2].classList.remove("line-clamp-4") // Make all text viewable.
+    if (curSection.classList.contains("grid-cols-2")) {
+        return;
     }
-    anchor.parentElement.parentElement.insertAdjacentElement("afterend", newSection);
-    anchor.parentElement.style.display = "none";
-    // find info
-    title = anchor.parentElement.children[0].innerHTML
-    description = anchor.parentElement.children[1].innerHTML
-    // Create details
-    const newDetails = document.createElement("article");
-    newDetails.classList.add("bg-gray-200", "rounded-md", "flex", "my-2", "w-full");
-    newDetails.style.height = "75vh";
-    newDetails.innerHTML = `<summary class="bg-green-200 w-1/3 rounded-tl-md rounded-bl-md p-2">
-    <h3 class="text-2xl font-bold">${title}</h3>
-    <p class="mt-2">${description}</p>
-    <ul class="list-disc list-inside">
-    <li>this is</li>
-    <li>incredibly</li>
-    <li>work in</li>
-    <li>progress</li>
-    </ul>
-</summary>
-<aside class="bg-amber-200 h-full w-2/3 rounded-tr-md rounded-br-md">
-    <div class="flex w-full h-3/4 bg-black rounded-tr-md">
-    <a href="javascript:void(0)" onclick="nextImage(this, -1)" class="w-1/8 h-full block bg-center bg-cover bg-clip-content p-5 -skew-y-12 -scale-x-100" style="background-image: url('src/media/placeholder.svg');"></a>
-    <div data-image-index="1" class="grow bg-no-repeat bg-center bg-contain" style="background-image: url(src/media/background.jpg);"></div>
-    <a href="javascript:void(0)" onclick="nextImage(this, 1)" class="w-1/8 h-full block bg-center bg-cover bg-clip-content p-5 skew-y-12" style="background-image: url('src/media/placeholder.svg');"></a>
-    </div>
-    <div class="bg-gray-700 h-1/8 flex overflow-scroll">
-    <a href="javascript:void(0)" onclick="changeImage(this)" class="h-full aspect-square border border-black bg-center bg-cover" style="background-image: url('src/media/placeholder.svg');"></a>
-    <a href="javascript:void(0)" onclick="changeImage(this)" class="h-full aspect-square border border-black bg-center bg-cover" style="background-image: url('src/media/background.jpg');"></a>
-    <a href="javascript:void(0)" onclick="changeImage(this)" class="h-full aspect-square border border-black bg-center bg-cover" style="background-image: url('src/media/placeholder-1.svg');"></a>
-    <a href="javascript:void(0)" onclick="changeImage(this)" class="h-full aspect-square border border-black bg-center bg-cover" style="background-image: url('src/media/placeholder-2.svg');"></a>
-    </div>
-    <a href="javascript:void(0)" onclick="closeDetails(this)" class="bg-red-300 px-7 py-1 rounded-md">Close</a>
-    <a href="form.html?type=resource&id=${anchor.parentElement.dataset.rId}" title="requires password!" class="bg-yellow-300 px-7 py-1 rounded-md">Edit</a>
-</aside>`;
-    newSection.insertAdjacentElement("beforebegin", newDetails);
+    // Move entries after this one to make this one wider
+    let curChildren = Array.from(articleElem.parentElement.children);
+    const afterSection = document.createElement("section");
+    afterSection.classList.add("grid", "justify-center", "gap-4", "grid-cols-4");
+    // Create a section containing the details plus a nearby item if width is big enough.
+    const newSection = document.createElement("section");
+    newSection.classList.add("grid", "justify-center", "gap-4", "my-2");
+
+    let offSet = 1 
+    if (innerWidth > 1024 && curChildren.indexOf(articleElem)+1 != curChildren.length) {
+        newSection.classList.add("grid-cols-2")
+        offSet = 2
+        newSection.appendChild(curChildren[curChildren.indexOf(articleElem)+1])
+    } else {
+        newSection.classList.add("grid-cols-1")
+    }
+    newSection.prepend(articleElem)
+    for (item of curChildren.slice(curChildren.indexOf(articleElem)+offSet)) {
+        afterSection.appendChild(item);
+    }
+    console.log(curSection)
+    curSection.insertAdjacentElement("afterend", afterSection);
+    curSection.insertAdjacentElement("afterend", newSection);
 } // holy wall of text slop code
 
 function closeDetails(anchor) {
-    const ogSection = anchor.parentElement.parentElement.previousElementSibling;
-    const afterSection = anchor.parentElement.parentElement.nextElementSibling;
-    anchor.parentElement.parentElement.remove();
-    ogSection.children[ogSection.children.length - 1].style.display = "block";
-    for (item of Array.from(afterSection.children)) { // not doing "Array.from()" for some reason skips the last one
-        ogSection.appendChild(item);
+    const articleElem = anchor.parentElement.parentElement;
+    const curSection = articleElem.parentElement;
+    // Revert button
+    anchor.classList.remove("bg-red-200", "w-1/2");
+    anchor.classList.add("bg-blue-200", "w-full");
+    anchor.innerHTML = "View Details";
+    anchor.setAttribute("onclick", "viewDetails(this)");
+    articleElem.children[2].classList.add("line-clamp-4"); // Reset line clamp
+    anchor.parentElement.children[1].remove(); // Remove edit button
+    // Revert ArcitleElem
+    delete articleElem.dataset.opened;
+    articleElem.style.minHeight = "inherit";
+    // Check if theres an adjacent element opened, and we should not reset formating.
+    if (curSection.children.length > 1 && (curSection.children[0].dataset.opened == "true" || curSection.children[1].dataset.opened == "true")) {
+        return;
     }
-    afterSection.remove();
+    // Reset section formating
+    const ogSection = curSection.previousSibling;
+    while (curSection.children.length > 0) {
+        ogSection.appendChild(curSection.children[0])
+    }
+    while (curSection.nextSibling.children.length > 0) {
+        ogSection.appendChild(curSection.nextSibling.children[0])
+    }
+    curSection.nextSibling.remove();
+    curSection.remove();
 }
+
+/* Images aren't going to be used so I'll be commenting all of these
 
 function changeImage(anchor) {
     const newImage = anchor.style.backgroundImage;
@@ -93,6 +116,7 @@ function nextImage(anchor, direction) {
     }
     changeImage(imagesGallary.children[nextIndex]);
 }
+*/
 
 function createEntires(data) {
     for (resource of data) {
