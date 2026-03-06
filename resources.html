@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/src/style.css" rel="stylesheet">
+  <link href="/src/resources.css" rel="stylesheet">
+  <title>Resources - Boruscant</title>
+  <link rel="icon" href="src/media/icon.png" sizes="32x32">
+  <script src="src/head.js"></script>
+</head>
+<body class="text-black dark:text-white">
+  <script>createNavBar()</script>
+  <header>
+    <div class="flex h-1/4 bg-white/60 dark:bg-black/60 justify-center items-center">
+        <h1 class=" p-4 text-8xl font-bold">Resources</h1>
+    </div>
+  </header>
+  <main class="min-h-screen bg-white dark:bg-black p-4">
+    <p>
+      Explore the different resources provided on Boruscant, from libraries to learn knowledge of today, to Museums to learn knowledge from yesterday, and even Food places to satiate your hunger always. Welcome, enjoy the places.
+    </p>
+    <br>
+    <p>
+      Interested in advertising your own place to this list? Visit the <a href="form.html" class="text-blue-500 hover:underline">form</a>
+    </p>
+    <br>
+    <h2 class="text-3xl font-bold">Resources</h2>
+    <div>
+      Search: <input id="search" type="text" placeholder="Search..." class="bg-white dark:bg-gray-900 px-4 py-3 border border-slate-300 dark:border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-" onchange="searchEntires(this.value)"/> 
+      Filter: <select id="filter" class="bg-white dark:bg-gray-900 px-4 py-3 border border-slate-300 dark:border-slate-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6798B5] focus:border-transparent" onchange="setFilter(this.value)">
+        <option value="" selected>No filter</option>
+        <option value="library">Libraries</option>
+        <option value="food">Food</option>
+        <option value="museum">Museums</option>
+      </select>
+    </div>
+    <section id="entriesSection" class="grid justify-center gap-4 grid-cols-4 mt-2">
+
+    </section>
+  </main>
+  <script src="src/main.js"></script>
+  <script src="src/resources.js"></script>
+</body>
+</html>

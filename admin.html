@@ -1,0 +1,185 @@
+<!--
+    Document to accept pending resources/events
+    will likely be a different subdomain than the actual website    
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boruscant - Admin</title>
+    <style>
+        header {
+            width: 100%;
+            background: cyan;
+        }
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            column-gap: 1vw;
+        }
+        header {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        article {
+            width: 20vw;
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 1vw;
+        }
+        h3 {
+            font-size: x-large;
+            font-weight: bold;
+        }
+        .bg_red {
+            background-color: #fca5a5;
+        }
+        .dark .bg_red {
+            background-color: #991b1b;
+        }
+        .bg_orange {
+            background-color: #fdba74; 
+        }
+        .dark .bg_orange {
+            background-color: #c2410c;
+        }
+        .bg_yellow {
+            background-color: #fde047;
+        }
+        .dark .bg_yellow {
+            background-color: #a16207;
+        }
+        .bg_green {
+            background-color: #86efac;
+        }
+        .dark .bg_green {
+            background-color: #166534;
+        }
+        .bg_blue {
+            background-color: #93c5fd;
+        }
+        .dark .bg_blue {
+            background-color: #1d4ed8;
+        }
+        .bg_purple {
+            background-color: #d8b4fe;
+        }
+        .dark .bg_purple {
+            background-color: #7e22ce;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div style="display: flex; align-items: center;">
+            <input
+                type="text"
+                id="passwordInput"
+                placeholder="password (admin)"
+                style="margin-right: 15px; height: 15px;"
+            />
+            <p id="status">Status</p>
+        </div>
+        <button onclick="getEntries('resources')">Pending Resources</button>
+        <button onclick="getEntries('events')">Pending Events</button>
+    </header>
+    <main>
+        <!-- <article style="background-color: lightgreen;">
+            <h3>Generic library</h3>
+            <p>Location:
+                <br>Type:
+            </p>
+            <p>Content</p>
+            <div>
+                <button onclick="acceptEntry(this.parentElement.parentElement)">Accept</button>
+                <button onclick="denyEntry(this.parentElement.parentElement)">Deny</button>
+            </div>
+        </article> -->
+    </main>
+    <script>
+        let ws = new WebSocket("ws://localhost:8764");
+        const passwordElem = document.getElementById("passwordInput");
+        const statusElem = document.getElementById("status");
+        let currentType; // Whatever type is shown on the dashboard, resources/events
+        const mainElem = document.querySelector("main");
+        let latestEntry; // The last entry that was moderated.
+
+        function acceptEntry(article) {
+            ws.send(JSON.stringify({
+                "request" : "accept_"+currentType,
+                "password" : passwordElem.value,
+                "id" : article.dataset.rId
+            }));
+            latestEntry = article;
+            statusElem.color = "black"
+            statusElem.innerHTML = "Pending accept..."
+        }
+        function denyEntry(article) {
+            ws.send(JSON.stringify({
+                "request" : "deny_"+currentType,
+                "password" : passwordElem.value,
+                "id" : article.dataset.rId
+            }));
+            latestEntry = article;
+            statusElem.color = "black"
+            statusElem.innerHTML = "Pending deny..."
+        }
+
+        function getEntries(type) {
+            currentType = type
+            ws.send(JSON.stringify(
+                {
+                    "request" : "get_"+type,
+                    "pending" : true,
+                    "password" : passwordElem.value
+                }
+            ))
+            statusElem.innerHTML = "Connecting..."
+            mainElem.innerHTML = ""
+        }
+        function createArticles(data) {
+            const entry = document.createElement("article");
+            entry.classList.add("bg_"+data[3]);
+            entry.dataset.rId = data[0];
+            entry.innerHTML = `<h3>${data[1]}</h3>
+<p>Location:${data[4]}
+<br><span>Type:${data[5]}<span></p>
+<p style="flex-grow: 1;">${data[2]}</p>
+<div>
+    <button onclick="acceptEntry(this.parentElement.parentElement)">Accept</button>
+    <button onclick="denyEntry(this.parentElement.parentElement)">Deny</button>
+</div>`
+            if (typeof data[5] === 'number') {
+                entry.children[1].children[1].innerHTML = `Start time ${new Date(data[5]).toLocaleString()}`
+            }
+            mainElem.appendChild(entry)
+        }
+
+        ws.addEventListener("error", (e) => {
+            statusElem.innerHTML = "lost connection to database"
+            statusElem.color = "red"
+        });
+        ws.addEventListener("message", (e) => {
+            if (e.data == 1) {
+                statusElem.innerHTML = "sucessfully moderated entry";
+                statusElem.style.color = "green";
+                latestEntry.remove();
+            } else if (e.data != 0) {
+                statusElem.innerHTML = "sucessfully got pending entries"
+                statusElem.style.color = "green"
+                for (resource of JSON.parse(e.data)) {
+                    createArticles(resource)
+                }
+            } else {
+                statusElem.innerHTML = "error"
+                statusElem.style.color = "red"
+            }
+        });
+        
+    </script>
+</body>
+</html>
